@@ -1,0 +1,471 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Advance 911 Mock Test</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: dispatch-console header strip with live clock, one centred work column, panels only where a record or form needs framing */
+:root{
+  --bg:#eef1f5;--surface:#ffffff;--soft:#e4eaf3;--ink:#16202e;--muted:#5a6578;--line:#d3d9e2;
+  --accent:#1f4e8c;--accent-ink:#ffffff;--warn:#a8650a;--good:#1d7a4e;--bad:#b3261e;--good-bg:#dcf1e6;--bad-bg:#fbe1de;
+  --bar:#13233d;--bar-ink:#e8eef7;--bar-muted:#93a6c2;
+  --display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e131a;--surface:#161d27;--soft:#1e2734;--ink:#e6ebf2;--muted:#95a2b5;--line:#2a3442;
+  --accent:#7ba8e8;--accent-ink:#0e131a;--warn:#e6a845;--good:#52c08a;--bad:#f2766b;--good-bg:#173527;--bad-bg:#3d1c1a;
+  --bar:#09101a;--bar-ink:#e6ebf2;--bar-muted:#7e8ea6;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e131a;--surface:#161d27;--soft:#1e2734;--ink:#e6ebf2;--muted:#95a2b5;--line:#2a3442;
+  --accent:#7ba8e8;--accent-ink:#0e131a;--warn:#e6a845;--good:#52c08a;--bad:#f2766b;--good-bg:#173527;--bad-bg:#3d1c1a;
+  --bar:#09101a;--bar-ink:#e6ebf2;--bar-muted:#7e8ea6;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);color:var(--bar-ink);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar .in{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:10px}
+.bar .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--bar-muted)}
+#mname{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:.01em}
+.left{display:flex;flex-direction:column;min-width:0}
+#clock{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:24px;font-weight:600;padding:2px 10px;border:1px solid var(--bar-muted);border-radius:6px}
+#clock.low{color:#ffb74d;border-color:#ffb74d}
+main{max-width:960px;margin:0 auto;padding-block:28px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+h1,h2{font-family:var(--display);font-weight:700;text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(32px,6vw,46px)}
+h2{font-size:26px}
+p{margin:0}
+.lede{color:var(--muted);max-width:62ch}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+button{font:inherit;font-weight:700;cursor:pointer;border-radius:8px;padding:10px 18px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.mods{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+.mod{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:14px 18px;border-top:1px solid var(--line)}
+.mod:first-child{border-top:0}
+.mod h3{margin:0;font-family:var(--display);font-size:19px;font-weight:600}
+.mod p{color:var(--muted);font-size:14px}
+.mod .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.mod > div{min-width:0}
+.note{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px;max-width:70ch}
+ul.tips{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.hint{color:var(--muted)}
+.passage{font-family:var(--mono);font-size:15px;line-height:1.8;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;color:var(--muted);white-space:pre-wrap;word-break:break-word}
+.passage .ok{color:var(--good)}
+.passage .no{color:var(--bad);background:var(--bad-bg)}
+.passage .cur{border-bottom:2px solid var(--accent);color:var(--ink)}
+textarea,input[type=text],input:not([type]){font-family:var(--mono);font-size:16px;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+textarea{min-height:140px;resize:vertical}
+input:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.split > *{min-width:0}
+@media (max-width:720px){.split{grid-template-columns:1fr}}
+dl.rec{margin:0;display:flex;flex-direction:column}
+dl.rec div{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:8px 0;border-top:1px dashed var(--line)}
+dl.rec div:first-child{border-top:0}
+dl.rec dt{color:var(--muted);font-size:14px}
+dl.rec dd{margin:0;font-family:var(--mono);font-weight:600;word-break:break-word}
+form.fields{display:flex;flex-direction:column;gap:6px}
+form.fields label{font-size:14px;color:var(--muted);margin-top:6px}
+form.fields button{margin-top:12px;align-self:flex-start}
+.progress{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.big{font-family:var(--display);font-weight:700;font-size:64px;line-height:1}
+.pass{color:var(--good)} .fail{color:var(--bad)}
+ul.lines,ul.rev{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+ul.rev{font-size:14px}
+details summary{cursor:pointer;font-weight:700;margin-bottom:8px}
+.result{display:flex;flex-direction:column;gap:14px}
+.memcard{font-family:var(--mono);font-size:20px}
+.rows{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+.row{display:grid;grid-template-columns:28px 90px 1fr 1fr auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row.head{background:var(--soft);font-size:12px;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row .v{font-family:var(--mono);font-weight:600;word-break:break-word;min-width:0}
+.row .n{font-family:var(--mono);color:var(--muted);font-size:13px}
+.row .t{font-size:13px;color:var(--muted)}
+.seg{display:flex;gap:6px}
+.seg button{padding:6px 10px;font-size:13px}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+@media (max-width:640px){.row{grid-template-columns:28px 1fr 1fr}.row .t{grid-column:2/4}.row .seg{grid-column:1/4}.row.head{display:none}}
+fieldset.q{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:16px 18px;margin:0;display:flex;flex-direction:column;gap:6px}
+fieldset.q legend{font-weight:700;padding:0 6px;max-width:100%}
+.qn{font-family:var(--mono);color:var(--muted);margin-right:8px}
+label.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;cursor:pointer}
+label.opt:hover{background:var(--soft)}
+label.opt input{margin-top:4px;accent-color:var(--accent)}
+.qs{display:flex;flex-direction:column;gap:12px}
+.report{font-size:15px;line-height:1.7;max-width:68ch}
+.rules{font-family:var(--mono);font-size:14px;background:var(--soft);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.mapwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.mapwrap svg{display:block;width:100%;min-width:480px;height:auto}
+.st{stroke:var(--line);stroke-width:14;stroke-linecap:round}
+.stc{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 6}
+.sl{fill:var(--muted);font-family:var(--mono);font-size:11px}
+.lm{fill:var(--accent)} .lmt{fill:var(--accent-ink);font-family:var(--display);font-weight:700;font-size:13px}
+.ow{fill:var(--warn);font-family:var(--mono);font-size:12px;font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;margin-top:10px}
+.legend b{font-family:var(--display);color:var(--accent)}
+.scores{display:flex;flex-direction:column;gap:10px}
+.sc{display:grid;grid-template-columns:170px 1fr 54px;gap:12px;align-items:center}
+.sc span:first-child{font-weight:700}
+.track{position:relative;height:12px;background:var(--soft);border-radius:6px}
+.fill{position:absolute;inset:0 auto 0 0;border-radius:6px}
+.mark{position:absolute;top:-4px;bottom:-4px;left:75%;width:2px;background:var(--ink);opacity:.5}
+.sc .pct{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+@media (max-width:520px){.sc{grid-template-columns:1fr 54px}.sc .track{grid-column:1/3;grid-row:2}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="bar"><div class="in">
+  <div class="left"><span class="tag">OPP Advance 911 · practice</span><span id="mname">Mock Test</span></div>
+  <span id="clock" aria-live="off">--:--</span>
+</div></header>
+<main id="app"></main>
+
+<script>
+const $=s=>document.querySelector(s);
+const app=$('#app');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rnd=n=>Math.floor(Math.random()*n);
+const pick=a=>a[rnd(a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const pct=g=>Math.round(g.c/g.n*100);
+
+/* ---------- data ---------- */
+const FN=["Priya","Daniel","Mei","Omar","Sarah","Jacques","Harpreet","Liam","Fatima","Noah","Chloe","Arjun","Ethan","Amara","Lucas","Olivia","Tyler","Nadia","Gurpreet","Brendan"];
+const LN=["Tremblay","Gill","MacDonald","Nguyen","Kowalski","Okafor","Bouchard","Sandhu","Fraser","Delorme","Chen","Whitfield","Laroche","Abernathy","Kaur","Desjardins","McAllister","Petrov","Sauve","Lindqvist"];
+const STREETS=["Mississaga St W","Coldwater Rd","Memorial Ave","Dunlop St E","Bayfield St","Yonge St","Brock St","Hwy 11 N","Penetanguishene Rd","Wellington St","Peter St N","Atherley Rd"];
+const TOWNS=["Orillia","Barrie","Midland","Bracebridge","Collingwood","Gravenhurst","Huntsville","Wasaga Beach","Innisfil","Severn"];
+const PL="ABCDEFGHJKLMNPRSTVWXYZ";
+function person(){
+  const first=pick(FN),last=pick(LN);
+  const phone=`${pick(['705','249','613','416'])}-${200+rnd(800)}-${String(rnd(10000)).padStart(4,'0')}`;
+  const plate=Array.from({length:4},()=>pick([...PL])).join('')+' '+String(100+rnd(900));
+  const y=1956+rnd(50),m=1+rnd(12),d=1+rnd(28);
+  const dob=`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const street=`${1+rnd(998)} ${pick(STREETS)}`;
+  const occ='E26'+String(rnd(1e7)).padStart(7,'0');
+  return {first,last,phone,plate,dob,street,town:pick(TOWNS),occ};
+}
+
+/* ---------- grading ---------- */
+const ABBR={street:'st',road:'rd',avenue:'ave',east:'e',west:'w',north:'n',south:'s',highway:'hwy',drive:'dr'};
+const norm=s=>String(s||'').toLowerCase().replace(/[.,]/g,' ').replace(/\s+/g,' ').trim().split(' ').map(w=>ABBR[w]||w).join(' ');
+const digits=s=>String(s||'').replace(/\D/g,'');
+const tight=s=>String(s||'').replace(/\s/g,'').toUpperCase();
+function same(kind,got,exp){
+  if(kind==='digits')return digits(got)===digits(exp);
+  if(kind==='plate')return tight(got)===tight(exp);
+  return norm(got)===norm(exp);
+}
+function grade(items){
+  let c=0;const rev=[];
+  items.forEach(it=>{if((it.got||'').trim()&&same(it.kind,it.got,it.exp))c++;
+    else rev.push(`${esc(it.label)}: expected <b>${esc(it.exp)}</b>, you typed <b>${esc(it.got||'(blank)')}</b>`)});
+  return {c,n:items.length,rev};
+}
+
+/* ---------- timer ---------- */
+let T=null;
+const fmt=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+function stopTimer(){if(T){clearInterval(T);T=null}}
+function timer(sec,onEnd){
+  stopTimer();let left=sec;const el=$('#clock');
+  const draw=()=>{el.textContent=fmt(Math.max(0,left));el.classList.toggle('low',left<=15)};
+  draw();T=setInterval(()=>{left--;draw();if(left<=0){stopTimer();onEnd()}},1000);
+}
+function idleClock(t){$('#clock').textContent=t||'--:--';$('#clock').classList.remove('low')}
+function hush(){try{if('speechSynthesis' in window)speechSynthesis.cancel()}catch(e){}}
+
+/* ---------- MCQ ---------- */
+function mcqHTML(qs,pre){
+  return `<div class="qs">${qs.map((q,qi)=>{
+    q.sh=shuffle(q.o.map((t,i)=>({t,ok:i===q.a})));
+    return `<fieldset class="q"><legend><span class="qn">${qi+1}</span>${esc(q.q)}</legend>${q.sh.map((o,oi)=>
+      `<label class="opt" for="${pre}-${qi}-${oi}"><input type="radio" name="${pre}-${qi}" id="${pre}-${qi}-${oi}" value="${oi}"><span>${esc(o.t)}</span></label>`).join('')}</fieldset>`}).join('')}</div>`;
+}
+function mcqGrade(qs,pre){
+  let c=0;const rev=[];
+  qs.forEach((q,qi)=>{const sel=document.querySelector(`input[name="${pre}-${qi}"]:checked`);
+    if(sel&&q.sh[+sel.value].ok)c++;else rev.push(`Q${qi+1}: correct answer is <b>${esc(q.o[q.a])}</b>`)});
+  return {c,n:qs.length,rev};
+}
+const fresh=qs=>qs.map(q=>({...q}));
+function mcqModule(id,sec,intro,qs){
+  let done=false;const Q=fresh(qs);
+  app.innerHTML=`${intro}${mcqHTML(Q,id)}<div class="actions"><button class="primary" id="sub">Submit answers</button></div>`;
+  const end=()=>{if(done)return;done=true;const g=mcqGrade(Q,id);finish(id,pct(g),[`${g.c} of ${g.n} correct`],g.rev)};
+  $('#sub').onclick=end;timer(sec,end);
+}
+
+/* ---------- module: typing ---------- */
+const PASSAGES=[
+"On October 14 at approximately 2140 hours, officers from the Orillia detachment responded to a report of a vehicle in the ditch on Highway 12 near Line 9 North. The driver, a 34-year-old resident of Coldwater, was found standing beside a grey 2019 Honda Civic bearing Ontario licence plate CVTR 482. The driver said a deer had crossed the roadway and that he swerved to avoid it. No injuries were reported. The vehicle was towed by Simcoe Auto Recovery to their yard at 77 Industrial Road. A collision report was completed and the driver was given the occurrence number for insurance purposes.",
+"At 0815 hours a caller from Bracebridge reported that her neighbour's dog had been barking for several hours and that nobody appeared to be home. The caller, Margaret Huang, gave her phone number as 705-555-0143 and her address as 19 Ecclestone Drive. An officer attended at 0907 hours and spoke with the dog's owner, who had just returned from an overnight shift at the hospital. The owner was cooperative and agreed to keep the dog inside while he slept. No further police action was required, and the caller was updated by phone at 0930 hours.",
+"A theft from vehicle was reported in the parking lot of the Wasaga Beach arena on Saturday afternoon. The complainant stated that he left his black Ford F-150 unlocked between 1300 and 1545 hours. When he returned, a laptop bag, a pair of sunglasses and about forty dollars in cash were missing from the front seat. There were no witnesses and the lot is not covered by cameras. The complainant was advised to lock his vehicle and keep valuables out of sight. He will contact police if any of the items are recovered."
+];
+function runTyping(){
+  const text=pick(PASSAGES);let started=false,t0=0,done=false;
+  app.innerHTML=`<p class="hint">Type the passage exactly, capitals and punctuation included. The clock starts on your first keystroke.</p>
+  <div class="passage" id="pass">${[...text].map(c=>`<span>${esc(c)}</span>`).join('')}</div>
+  <textarea id="ty" spellcheck="false" autocomplete="off" autocapitalize="off" maxlength="${text.length}" aria-label="Type the passage here"></textarea>
+  <div class="actions"><button id="fin">Finish early</button></div>`;
+  idleClock('01:00');
+  const spans=[...$('#pass').children],ta=$('#ty');
+  spans[0].className='cur';
+  ta.addEventListener('input',()=>{
+    if(!started){started=true;t0=Date.now();timer(60,end)}
+    const v=ta.value;
+    spans.forEach((s,i)=>{s.className=i<v.length?(v[i]===text[i]?'ok':'no'):(i===v.length?'cur':'')});
+    if(v.length>=text.length)end();
+  });
+  ta.addEventListener('paste',e=>e.preventDefault());
+  function end(){
+    if(done)return;done=true;stopTimer();ta.disabled=true;
+    const v=ta.value;const secs=started?Math.max(5,Math.min(60,(Date.now()-t0)/1000)):60;
+    let ok=0,bad=0;for(let i=0;i<v.length;i++){v[i]===text[i]?ok++:bad++}
+    const net=Math.max(0,(ok-bad)/5/(secs/60));const acc=v.length?ok/v.length*100:0;
+    finish('typing',Math.min(100,Math.round(net/40*100)),
+      [`Net speed: <b>${Math.round(net)} WPM</b> (practice target: 40+)`,`Accuracy: <b>${acc.toFixed(1)}%</b> (aim for 97%+)`,`${v.length} characters in ${Math.round(secs)} seconds, ${bad} errors`],[]);
+  }
+  $('#fin').onclick=end;ta.focus();
+}
+
+/* ---------- module: data entry ---------- */
+const EF=[
+ {k:'last',l:'Surname',src:'Last name',kind:'text'},
+ {k:'first',l:'Given name',src:'First',kind:'text'},
+ {k:'dob',l:'Date of birth (YYYY-MM-DD)',src:'Born',kind:'digits'},
+ {k:'phone',l:'Phone',src:'Tel.',kind:'digits'},
+ {k:'plate',l:'Plate',src:'Licence plate',kind:'plate'},
+ {k:'street',l:'Street address',src:'Address',kind:'text'},
+ {k:'town',l:'Municipality',src:'Town',kind:'text'},
+ {k:'occ',l:'Occurrence #',src:'Occ. no.',kind:'plate'}];
+function runEntry(){
+  const recs=Array.from({length:5},person),ans=recs.map(()=>({}));let i=0,done=false;
+  const save=()=>EF.forEach(f=>{const el=$('#e-'+f.k);if(el)ans[i][f.k]=el.value});
+  function draw(){
+    const r=recs[i];
+    app.innerHTML=`<p class="progress">Record ${i+1} of ${recs.length}</p><div class="split">
+    <section class="panel"><p class="eyebrow">Source document</p><dl class="rec">${shuffle(EF).map(f=>`<div><dt>${f.src}</dt><dd>${esc(r[f.k])}</dd></div>`).join('')}</dl></section>
+    <form class="panel fields" id="ef"><p class="eyebrow">Entry screen</p>${EF.map(f=>`<label for="e-${f.k}">${f.l}</label><input id="e-${f.k}" autocomplete="off" spellcheck="false">`).join('')}
+    <button class="primary" type="submit">${i<recs.length-1?'Next record':'Submit'}</button></form></div>`;
+    $('#ef').onsubmit=e=>{e.preventDefault();save();if(i<recs.length-1){i++;draw();window.scrollTo(0,0)}else end()};
+    $('#e-last').focus();
+  }
+  function end(){
+    if(done)return;done=true;save();const items=[];
+    recs.forEach((r,ri)=>EF.forEach(f=>items.push({label:`Record ${ri+1}, ${f.l}`,kind:f.kind,exp:r[f.k],got:ans[ri][f.k]})));
+    const g=grade(items);finish('entry',pct(g),[`${g.c} of ${g.n} fields correct`,`Records reached: ${Math.min(i+1,recs.length)} of ${recs.length}`],g.rev);
+  }
+  timer(240,end);draw();
+}
+
+/* ---------- module: audio entry ---------- */
+const spell=s=>[...String(s).replace(/\s/g,'').toUpperCase()].join(' ');
+const sayDigits=p=>p.split('-').map(g=>[...g].join(' ')).join(', ');
+const sayStreet=s=>s.replace(/\bSt\b/,'Street').replace(/\bRd\b/,'Road').replace(/\bAve\b/,'Avenue').replace(/\bHwy\b/,'Highway').replace(/ E$/,' East').replace(/ W$/,' West').replace(/ N$/,' North');
+function runAudio(){
+  if(!('speechSynthesis' in window))return finish('audio',null,['Your browser cannot play spoken audio here, so this module was skipped. Try it in Chrome or Edge.'],[]);
+  const AF=[{k:'first',l:'First name',kind:'text'},{k:'last',l:'Last name',kind:'text'},{k:'phone',l:'Phone',kind:'digits'},{k:'plate',l:'Licence plate',kind:'plate'},{k:'street',l:'Street address',kind:'text'}];
+  const recs=Array.from({length:4},person),ans=recs.map(()=>({}));let i=0,plays=0,done=false;
+  const save=()=>AF.forEach(f=>{const el=$('#a-'+f.k);if(el)ans[i][f.k]=el.value});
+  function say(){
+    const r=recs[i];
+    const txt=`Record ${i+1}. First name: ${r.first}, spelled ${spell(r.first)}. Last name: ${r.last}, spelled ${spell(r.last)}. Phone: ${sayDigits(r.phone)}. Licence plate: ${spell(r.plate)}. Address: ${sayStreet(r.street)}.`;
+    try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang='en-CA';u.rate=.92;speechSynthesis.speak(u)}catch(e){}
+    plays++;drawBtn();
+  }
+  const drawBtn=()=>{const b=$('#play');b.textContent=plays===0?'Play record':plays===1?'Replay (1 left)':'No replays left';b.disabled=plays>=2};
+  function draw(){
+    plays=0;
+    app.innerHTML=`<p class="progress">Record ${i+1} of ${recs.length}</p>
+    <section class="panel"><p class="hint">Press play, listen, and type what you hear. You get one replay per record. Abbreviations like St and Rd are fine.</p><div class="actions" style="margin-top:12px"><button class="primary" id="play"></button></div></section>
+    <form class="panel fields" id="af">${AF.map(f=>`<label for="a-${f.k}">${f.l}</label><input id="a-${f.k}" autocomplete="off" spellcheck="false">`).join('')}
+    <button class="primary" type="submit">${i<recs.length-1?'Next record':'Submit'}</button></form>`;
+    drawBtn();$('#play').onclick=say;
+    $('#af').onsubmit=e=>{e.preventDefault();save();hush();if(i<recs.length-1){i++;draw()}else end()};
+  }
+  function end(){
+    if(done)return;done=true;save();const items=[];
+    recs.forEach((r,ri)=>AF.forEach(f=>items.push({label:`Record ${ri+1}, ${f.l}`,kind:f.kind,exp:r[f.k],got:ans[ri][f.k]})));
+    const g=grade(items);finish('audio',pct(g),[`${g.c} of ${g.n} fields correct`],g.rev);
+  }
+  timer(240,end);draw();
+}
+
+/* ---------- module: memory ---------- */
+function runMemory(){
+  const MF=[{k:'name',l:'Full name',kind:'text'},{k:'plate',l:'Licence plate',kind:'plate'},{k:'phone',l:'Phone',kind:'digits'},{k:'badge',l:'Badge #',kind:'digits'}];
+  const ROUNDS=3,items=[];let r=0;
+  function show(){
+    const p=person();p.name=`${p.first} ${p.last}`;p.badge=String(10000+rnd(90000));
+    app.innerHTML=`<p class="progress">Round ${r+1} of ${ROUNDS} · memorise</p><section class="panel"><p class="eyebrow">Study this. It disappears when the clock hits zero.</p>
+    <dl class="rec memcard">${MF.map(f=>`<div><dt>${f.l}</dt><dd>${esc(p[f.k])}</dd></div>`).join('')}</dl></section>`;
+    timer(12,()=>ask(p));
+  }
+  function ask(p){
+    let sent=false;
+    app.innerHTML=`<p class="progress">Round ${r+1} of ${ROUNDS} · recall</p><form class="panel fields" id="mf"><p class="eyebrow">Type what you remember</p>${MF.map(f=>`<label for="m-${f.k}">${f.l}</label><input id="m-${f.k}" autocomplete="off" spellcheck="false">`).join('')}
+    <button class="primary" type="submit">${r<ROUNDS-1?'Next round':'Submit'}</button></form>`;
+    const go=()=>{if(sent)return;sent=true;stopTimer();
+      MF.forEach(f=>items.push({label:`Round ${r+1}, ${f.l}`,kind:f.kind,exp:p[f.k],got:$('#m-'+f.k).value}));
+      r++;if(r<ROUNDS)show();else{const g=grade(items);finish('memory',pct(g),[`${g.c} of ${g.n} items recalled correctly`],g.rev)}};
+    $('#mf').onsubmit=e=>{e.preventDefault();go()};$('#m-name').focus();timer(45,go);
+  }
+  show();
+}
+
+/* ---------- module: cross-check ---------- */
+const SIM={B:'P',P:'B',C:'G',G:'C',M:'N',N:'M',E:'F',F:'E',V:'W',W:'V',H:'K',K:'H',R:'P',T:'Y',Y:'T',A:'R',D:'B',J:'L',L:'J',S:'Z',Z:'S',X:'K'};
+function mutate(type,v){
+  for(let t=0;t<30;t++){
+    const ch=[...v];const at=re=>ch.map((c,i)=>re.test(c)?i:-1).filter(i=>i>=0);
+    if(type==='phone'||type==='dob'){const ds=at(/\d/);const k=rnd(ds.length);
+      if(Math.random()<.5&&k<ds.length-1){[ch[ds[k]],ch[ds[k+1]]]=[ch[ds[k+1]],ch[ds[k]]]}else ch[ds[k]]=String((+ch[ds[k]]+1+rnd(8))%10)}
+    else if(type==='plate'){if(Math.random()<.6){const k=rnd(4);ch[k]=SIM[ch[k]]||'K'}else{const k=5+rnd(2);[ch[k],ch[k+1]]=[ch[k+1],ch[k]]}}
+    else if(type==='name'){const ls=at(/[a-z]/).filter(i=>/[a-z]/.test(ch[i+1]||''));const k=pick(ls);[ch[k],ch[k+1]]=[ch[k+1],ch[k]]}
+    else{const ds=at(/\d/);const k=pick(ds);ch[k]=String((+ch[k]+1+rnd(8))%10)}
+    const out=ch.join('');if(out!==v)return out;
+  }
+  return v+'1';
+}
+function runCheck(){
+  const LBL={name:'Name',phone:'Phone',plate:'Plate',street:'Address',dob:'DOB'};
+  const rows=Array.from({length:16},()=>{const p=person();const type=pick(Object.keys(LBL));
+    const a=type==='name'?`${p.last}, ${p.first}`:p[type];const diff=Math.random()<.5;return {type,a,b:diff?mutate(type,a):a,diff,ans:null}});
+  let done=false;
+  app.innerHTML=`<p class="hint">Compare each system record with the officer's notes. Mark <b>Same</b> only if every character matches.</p>
+  <div class="rows"><div class="row head"><span>#</span><span>Field</span><span>System</span><span>Officer's notes</span><span>Match?</span></div>
+  ${rows.map((r,i)=>`<div class="row"><span class="n">${i+1}</span><span class="t">${LBL[r.type]}</span><span class="v">${esc(r.a)}</span><span class="v">${esc(r.b)}</span>
+  <span class="seg"><button type="button" data-i="${i}" data-v="same" aria-pressed="false">Same</button><button type="button" data-i="${i}" data-v="diff" aria-pressed="false">Different</button></span></div>`).join('')}</div>
+  <div class="actions"><button class="primary" id="sub">Submit</button></div>`;
+  app.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;rows[i].ans=b.dataset.v;
+    b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))});
+  const end=()=>{if(done)return;done=true;let c=0;const rev=[];
+    rows.forEach((r,i)=>{const want=r.diff?'diff':'same';if(r.ans===want)c++;else rev.push(`#${i+1} ${LBL[r.type]}: <b>${esc(r.a)}</b> vs <b>${esc(r.b)}</b> was ${r.diff?'different':'the same'}${r.ans?'':' (not answered)'}`)});
+    finish('check',Math.round(c/rows.length*100),[`${c} of ${rows.length} correct`],rev)};
+  $('#sub').onclick=end;timer(90,end);
+}
+
+/* ---------- module: reading & spelling ---------- */
+const READ_Q=[
+ {q:'Who is the registered owner of the RAV4?',o:['Danielle Moreau','Kevin Moreau','Constable Reyes','Severn Township'],a:0},
+ {q:'How far over the speed limit was the vehicle travelling?',o:['22 km/h','72 km/h','50 km/h','12 km/h'],a:0},
+ {q:'What was Kevin charged with?',o:['Speeding only','Speeding and failing to carry the ownership','Driving without the owner\'s permission','He was not charged'],a:0},
+ {q:'Why was Danielle contacted?',o:['To confirm Kevin had permission to use the vehicle','To tell her about the ticket','Because she witnessed the stop','To arrange a tow'],a:0},
+ {q:'Choose the correct spelling.',o:['occurrence','occurence','ocurrence','occurrance'],a:0},
+ {q:'Choose the correct spelling.',o:['harassment','harrassment','harasment','harrasment'],a:0},
+ {q:'Choose the correct spelling.',o:['surveillance','surveilance','survielance','surveillence'],a:0},
+ {q:'Choose the correct Canadian spelling of the noun, as in "driver\'s ___".',o:['licence','lisence','licanse','lisense'],a:0},
+ {q:'Choose the correct spelling.',o:['accommodate','accomodate','acommodate','acomodate'],a:0},
+ {q:'Choose the correct Canadian spelling.',o:['jewellery','jewelery','jewlery','jewelry\'s'],a:0},
+ {q:'Each of the officers ___ required to complete a report.',o:['is','are','were','be'],a:0},
+ {q:'The suspect ran ___ the parking lot toward the arena.',o:['through','threw','thru','though'],a:0}];
+function runRead(){
+  mcqModule('read',300,`<section class="panel"><p class="eyebrow">Read the report, then answer. You can scroll back to it.</p><p class="report" style="margin-top:8px">At 1420 hours on Tuesday, Constable Reyes stopped a silver Toyota RAV4 on Memorial Avenue for travelling 72 km/h in a 50 km/h zone. The driver, Kevin Moreau, produced a valid licence but could not find the vehicle's ownership. A records check showed the vehicle was registered to his sister, Danielle Moreau, of Severn Township. Kevin stated that he was borrowing the vehicle to drive to a medical appointment. He was issued a ticket for speeding and was cautioned about carrying the ownership. Danielle was contacted by phone and confirmed that her brother had permission to use the vehicle. No other charges were laid.</p></section>`,READ_Q);
+}
+
+/* ---------- module: decision making ---------- */
+const DEC_Q=[
+ {q:'Three reports are waiting in your queue. Which do you enter first?',o:['A missing person report filed 20 minutes ago','A lost wallet report from last week','A parking complaint from this morning','Whichever arrived first'],a:0},
+ {q:'Using the routing rules: "Neighbour dispute. One party has a cut on his hand. No weapon reported." Which queue?',o:['Queue B','Queue A','Queue C','Hold for a supervisor'],a:0},
+ {q:'Using the routing rules: "Theft from vehicle. Witness saw the suspect carrying a knife." Which queue?',o:['Queue A','Queue B','Queue C','Hold for a supervisor'],a:0},
+ {q:'Using the routing rules: "Loud music complaint. No injuries. No weapons." Which queue?',o:['Queue C','Queue B','Queue A','Hold for a supervisor'],a:0},
+ {q:'The plate in an officer\'s report does not match the vehicle description in the system. What do you do?',o:['Enter it as written and flag the mismatch for the officer to confirm','Change the plate so it matches the system','Change the vehicle description to match the plate','Leave the vehicle section out'],a:0},
+ {q:'Two reports arrive minutes apart for the same address and describe the same incident. What do you do?',o:['Flag them as a possible duplicate and check if they should be linked','Enter both as separate, unrelated occurrences','Delete the second report','Combine them yourself without telling anyone'],a:0}];
+function runDecide(){
+  mcqModule('decide',240,`<section class="panel"><p class="eyebrow">Routing rules for questions 2 to 4</p><div class="rules" style="margin-top:8px"><span>Any mention of a weapon → Queue A</span><span>Injury but no weapon → Queue B</span><span>Everything else → Queue C</span></div></section>`,DEC_Q);
+}
+
+/* ---------- module: map reading ---------- */
+const MAP_Q=[
+ {q:'A unit at the Detachment (D) needs to reach the Hospital (H). Which route works?',o:['East on King St to Elm St, then south on Elm St to Dunlop St','West on King St to Elm St, then south on Elm St','East on King St to Elm St, then north on Elm St to Dunlop St','South on Main St to Dunlop St, then west on Dunlop St'],a:0},
+ {q:'Which landmark is in the northeast corner of the map?',o:['Gas station (G)','School (S)','Detachment (D)','Library (L)'],a:0},
+ {q:'Queen St is one-way eastbound. A unit at the School (S) needs to reach Bay St & Queen St. Which route is legal?',o:['North on Pine St to King St, west on King St to Bay St, then south on Bay St to Queen St','West on Queen St to Bay St','South on Pine St to King St, then west on King St','East on Queen St to Bay St'],a:0},
+ {q:'The Library (L) is at which intersection?',o:['Bay St & Dunlop St','Elm St & Dunlop St','Bay St & Queen St','Main St & Dunlop St'],a:0}];
+function mapSVG(){
+  const H=[['King St',60],['Queen St',160],['Dunlop St',260]],V=[['Main St',80],['Bay St',200],['Elm St',320],['Pine St',440]];
+  const LM=[['D',80,60],['H',320,260],['S',440,160],['L',200,260],['G',440,60]];
+  return `<svg viewBox="0 0 540 320" role="img" aria-label="Street grid map with five landmarks">
+  ${H.map(([n,y])=>`<line class="st" x1="40" y1="${y}" x2="480" y2="${y}"/>`).join('')}
+  ${V.map(([n,x])=>`<line class="st" x1="${x}" y1="30" x2="${x}" y2="290"/>`).join('')}
+  ${H.map(([n,y])=>`<text class="sl" x="486" y="${y+4}">${n}</text>`).join('')}
+  ${V.map(([n,x])=>`<text class="sl" x="${x}" y="308" text-anchor="middle">${n}</text>`).join('')}
+  <text class="ow" x="120" y="152">→ one way</text><text class="ow" x="360" y="152">→</text>
+  ${LM.map(([l,x,y])=>`<circle class="lm" cx="${x}" cy="${y}" r="13"/><text class="lmt" x="${x}" y="${y+5}" text-anchor="middle">${l}</text>`).join('')}
+  <text class="sl" x="30" y="22" text-anchor="middle">N ↑</text></svg>`;
+}
+function runMap(){
+  mcqModule('map',180,`<section class="mapwrap">${mapSVG()}<div class="legend"><span><b>D</b> OPP Detachment</span><span><b>H</b> Hospital</span><span><b>S</b> School</span><span><b>L</b> Library</span><span><b>G</b> Gas station</span></div></section><p class="hint">North is at the top. Queen St is one-way eastbound; every other street is two-way.</p>`,MAP_Q);
+}
+
+/* ---------- flow ---------- */
+const MODS=[
+ {id:'typing',name:'Typing speed',secs:60,run:runTyping,desc:'Copy a short police report for 60 seconds. Scored on net words per minute.',tips:['Accuracy beats speed. Every error is subtracted from your score.','Copy and paste is disabled.']},
+ {id:'entry',name:'Data entry',secs:240,run:runEntry,desc:'Copy 5 records from a source document into an entry screen. Fields are in a different order on each side.',tips:['Match each value by its label, not its position.','Phone and date formats are checked by digits only; names and addresses must be spelled exactly.']},
+ {id:'audio',name:'Audio data entry',secs:240,run:runAudio,desc:'Listen to 4 caller records read aloud and type what you hear. One replay per record.',tips:['Turn your sound on or use headphones.','Type while you listen. Don\'t wait for the end.']},
+ {id:'memory',name:'Memory recall',secs:171,run:runMemory,desc:'Study a record for 12 seconds, then type it from memory. 3 rounds.',tips:['Chunk numbers into groups, like 705 / 482 / 1903.','Say the plate to yourself as letters, then numbers.']},
+ {id:'check',name:'Cross-checking',secs:90,run:runCheck,desc:'Compare 16 pairs of entries and decide if they match exactly.',tips:['Check digit by digit. Swapped digits are the most common trap.','Look-alike letters (B/P, M/N, C/G) count as different.']},
+ {id:'read',name:'Reading and spelling',secs:300,run:runRead,desc:'Read a short occurrence report, then answer comprehension, spelling and grammar questions.',tips:['The Canadian spellings (licence, jewellery) are the correct ones here.']},
+ {id:'decide',name:'Decision making',secs:240,run:runDecide,desc:'Prioritize reports and route them using a set of rules.',tips:['Apply the rules as written, even if your instinct says otherwise.']},
+ {id:'map',name:'Map reading',secs:180,run:runMap,desc:'Read a street map and pick the right route or location.',tips:['North is up. Watch for the one-way street.']}];
+const S={queue:[],results:{}};
+const getMod=id=>MODS.find(m=>m.id===id);
+
+function home(){
+  stopTimer();hush();idleClock();$('#mname').textContent='Mock Test';S.queue=[];
+  const total=Math.round(MODS.reduce((a,m)=>a+m.secs,0)/60);
+  app.innerHTML=`<section style="display:flex;flex-direction:column;gap:12px">
+    <p class="eyebrow">Civilian Data Entry · Technology Disclosure</p>
+    <h1>Advance 911 Mock Test</h1>
+    <p class="lede">Eight timed modules modelled on the skills these tests usually check. New names, plates and numbers every time you retake it. About ${total} minutes for the full run.</p>
+    <div class="actions"><button class="primary" id="full">Start full test</button></div></section>
+  <div class="mods">${MODS.map(m=>`<div class="mod"><div><h3>${m.name}</h3><p>${m.desc}</p><span class="meta">${fmt(m.secs)}</span></div><button data-id="${m.id}">Practice</button></div>`).join('')}</div>
+  <p class="note">This is unofficial practice. The OPP doesn't publish the exact Advance 911 modules or pass marks, so this covers the common ones. 75% is used as a rough practice target.</p>`;
+  $('#full').onclick=()=>{S.results={};S.queue=MODS.map(m=>m.id);next()};
+  app.querySelectorAll('.mod button').forEach(b=>b.onclick=()=>{S.queue=[b.dataset.id];next()});
+  window.scrollTo(0,0);
+}
+function next(){
+  const id=S.queue.shift();if(!id)return summary();
+  const m=getMod(id);$('#mname').textContent=m.name;idleClock(fmt(m.secs));
+  app.innerHTML=`<section class="panel result"><p class="eyebrow">Up next</p><h2>${m.name}</h2><p>${m.desc}</p><ul class="tips">${m.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+  <div class="actions"><button class="primary" id="go">Start</button><button id="hm">Back to menu</button></div></section>`;
+  $('#go').onclick=()=>{window.scrollTo(0,0);m.run()};$('#hm').onclick=home;$('#go').focus();window.scrollTo(0,0);
+}
+const cls=s=>s==null?'':s>=75?'pass':'fail';
+function finish(id,score,lines,rev){
+  stopTimer();hush();idleClock();
+  S.results[id]={score,lines,rev};const m=getMod(id);const more=S.queue.length>0;
+  app.innerHTML=`<section class="panel result"><p class="eyebrow">${m.name} · done</p>
+  <div class="big ${cls(score)}">${score==null?'Skipped':score+'%'}</div>
+  <ul class="lines">${lines.map(l=>`<li>${l}</li>`).join('')}</ul>
+  ${rev.length?`<details${rev.length<=8?' open':''}><summary>What you missed (${rev.length})</summary><ul class="rev">${rev.slice(0,20).map(r=>`<li>${r}</li>`).join('')}</ul></details>`:''}
+  <div class="actions"><button class="primary" id="nx">${more?'Next module':'See results'}</button><button id="re">Retry this module</button><button id="hm">Menu</button></div></section>`;
+  $('#nx').onclick=next;$('#hm').onclick=home;$('#re').onclick=()=>{S.queue.unshift(id);next()};
+  window.scrollTo(0,0);
+}
+function summary(){
+  idleClock();$('#mname').textContent='Results';
+  const done=MODS.filter(m=>S.results[m.id]);const sc=done.map(m=>S.results[m.id].score).filter(s=>s!=null);
+  const avg=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):null;
+  const weak=done.filter(m=>S.results[m.id].score!=null).sort((a,b)=>S.results[a.id].score-S.results[b.id].score)[0];
+  app.innerHTML=`<section class="panel result"><p class="eyebrow">Overall</p><div class="big ${cls(avg)}">${avg==null?'n/a':avg+'%'}</div>
+  ${weak&&done.length>1?`<p>Weakest area: <b>${weak.name}</b>. Practise that one first.</p>`:''}
+  <div class="scores">${done.map(m=>{const s=S.results[m.id].score;return `<div class="sc"><span>${m.name}</span><span class="track"><span class="fill" style="width:${s||0}%;background:var(--${s==null?'line':s>=75?'good':'bad'})"></span><span class="mark"></span></span><span class="pct">${s==null?'skip':s+'%'}</span></div>`}).join('')}</div>
+  <p class="note">The line on each bar marks the 75% practice target.</p>
+  <div class="actions"><button class="primary" id="again">Retake full test</button><button id="hm">Menu</button></div></section>`;
+  $('#again').onclick=()=>{S.results={};S.queue=MODS.map(m=>m.id);next()};$('#hm').onclick=home;window.scrollTo(0,0);
+}
+home();
+</script>
+
+</body></html>
